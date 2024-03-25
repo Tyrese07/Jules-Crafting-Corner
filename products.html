@@ -222,30 +222,6 @@
     <footer class="footer">
         <p>&copy; 2024 Jules Crafting Corner</p>
     </footer>
-     <script>
-        // Function to add a product to the cart
-        function addToCart(productName, price) {
-            // Check if the cart exists in local storage
-            var cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-            // Create a new item for the cart
-            var newItem = {
-                name: productName,
-                price: price
-            };
-
-            // Add the new item to the cart
-            cart.push(newItem);
-
-            // Store the updated cart in local storage
-            localStorage.setItem('cart', JSON.stringify(cart));
-
-            // Show a confirmation message
-            alert('Product added to cart!');
-
-            // Optional: Redirect to the cart page
-            // window.location.href = 'cart.html';
-        }
-    </script>
+     
 </body>
 </html>
