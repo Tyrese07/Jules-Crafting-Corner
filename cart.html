@@ -94,7 +94,7 @@
             </tbody>
         </table>
 
-        <p>Your shopping cart is empty. Start adding some creative products!</p>
+        <p id="emptyCartMessage">Your shopping cart is empty. Start adding some creative products!</p>
         <!-- You can add links to the product listing  -->
     </section>
 
@@ -106,20 +106,23 @@
         // Function to display cart items
         function displayCartItems() {
             const queryParams = new URLSearchParams(window.location.search);
-            const itemJson = queryParams.getAll('item');
-            if (itemJson.length > 0) {
-                const cartItems = document.getElementById('cartItems');
-                itemJson.forEach(item => {
-                    const cartItem = JSON.parse(decodeURIComponent(item));
+            const cartItems = queryParams.getAll('item');
+            const cartItemsContainer = document.getElementById('cartItems');
+            const emptyCartMessage = document.getElementById('emptyCartMessage');
+
+            if (cartItems.length === 0) {
+                emptyCartMessage.style.display = 'block';
+            } else {
+                emptyCartMessage.style.display = 'none';
+                cartItems.forEach(itemJson => {
+                    const cartItem = JSON.parse(decodeURIComponent(itemJson));
                     const cartItemRow = document.createElement('tr');
                     cartItemRow.innerHTML = `
                         <td>${cartItem.name}</td>
                         <td>$${cartItem.price}</td>
                     `;
-                    cartItems.appendChild(cartItemRow);
+                    cartItemsContainer.appendChild(cartItemRow);
                 });
-            } else {
-                document.querySelector('section p').textContent = "Your shopping cart is empty. Start adding some creative products!";
             }
         }
 
