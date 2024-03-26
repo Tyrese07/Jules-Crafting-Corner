@@ -4,37 +4,42 @@ const config = require('config.js');
 // Configure AWS SDK
 AWS.config.update({ region: config.aws.region });
 
-// Create a new CognitoIdentityServiceProvider object
-const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
-
-// Function to register a new user
-async function registerUser(username, password, email) {
-  const params = {
-    ClientId: config.aws.cognito.userPoolWebClientId,
-    Username: username,
-    Password: password,
-    UserAttributes: [
-      {
-        Name: 'email',
-        Value: email,
-      },
-      // Add additional attributes if needed
-    ],
-  };
-
-  try {
-    const data = await cognitoIdentityServiceProvider.signUp(params).promise();
-    console.log('User registered successfully:', data);
-    return data;
-  } catch (error) {
-    console.error('Error registering user:', error);
-    throw error;
-  }
-}
-
-// Example usage
-const username = 'new_user';
-const password = 'P@ssw0rd';
-const email = 'new_user@example.com';
-
-registerUser(username, password, email);
+document.getElementById('registerButton').addEventListener('click', async function(event) {
+    event.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    const userData = {
+        username: username,
+        email: email,
+        password: password
+    };
+    
+    try {
+        const response = await fetch(config.backendUrl + '/register', {  // Assuming backendUrl is defined in config.js
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Registration failed');
+        }
+        
+        alert('Registration successful! Please check your email to verify your account.');
+        // Optionally, redirect the user to another page after successful registration
+        // window.location.href = '/success.html';
+        
+        // Clear the form fields
+        document.getElementById('username').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Registration failed. Please try again later.');
+    }
+});
