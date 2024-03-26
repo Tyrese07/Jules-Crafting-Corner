@@ -169,36 +169,36 @@
 
     <section class="products">
         <!-- Product items -->
+<div class="product">
+            <img src="Decals.jpg" alt="Decals" class="product__image">
+            <h2 class="product__title">Custom Decals</h2>
+            <p class="product__description">Leave a comment about design. All pricing subject to change due to size and complexity of design!</p>
+            <p class="product__price">$29.99</p>
+            <button class="product__button" onclick="addToCart(2, 'Custom Decals', 29.99)">Add to Cart</button>
+        </div>
+
         <div class="product">
             <img src="cups.png" alt="Crafting Supplies" class="product__image">
             <h2 class="product__title">Custom Cup</h2>
             <p class="product__description"> Leave a comment about design. All pricing subject to change due to size and complexity of design! </p>
             <p class="product__price">$19.99</p>
-            <button class="product__button">Add to Cart</button>
+            <button class="product__button" onclick="addToCart(1, 'Custom Cup', 19.99)">Add to Cart</button>
         </div>
 
-        <div class="product">
-            <img src="Decals.jpg" alt="Handmade Clothing" class="product__image">
-            <h2 class="product__title">Custom Decals</h2>
-            <p class="product__description">Leave a comment about design. All pricing subject to change due to size and complexity of design!</p>
-            <p class="product__price">$29.99</p>
-            <button class="product__button">Add to Cart</button>
-        </div>
-
-        <div class="product">
+       <div class="product">
             <img src="TShirt.jpg" alt="Product 3" class="product__image">
             <h2 class="product__title">Custom T-Shirt</h2>
             <p class="product__description">Leave a comment about design. All pricing subject to change due to size and complexity of design!</p>
             <p class="product__price">$34.99</p>
-            <button class="product__button">Add to Cart</button>
+            <button class="product__button" onclick="addToCart(3, 'Custom T-Shirt', 34.99)">Add to Cart</button>
         </div>
 
         <div class="product">
-            <img src="Stickers.png" alt="Product 4" class="product__image">
+            <img src="Stickers.png" alt="Stickers" class="product__image">
             <h2 class="product__title">Custom Page of Stickers</h2>
             <p class="product__description">Leave a comment about design. All pricing subject to change due to size and complexity of design!</p>
             <p class="product__price">$4.99</p>
-            <button class="product__button">Add to Cart</button>
+             <button class="product__button" onclick="addToCart(4, 'Custom Page of Stickers', 4.99)">Add to Cart</button>
         </div>
 
         <div class="product">
@@ -206,7 +206,7 @@
             <h2 class="product__title">Custom Tote Bag</h2>
             <p class="product__description">Leave a comment about design. All pricing subject to change due to size and complexity of design!</p>
             <p class="product__price">$24.99</p>
-            <button class="product__button">Add to Cart</button>
+             <button class="product__button" onclick="addToCart(5, 'Custom Tote Bag', 24.99)">Add to Cart</button>
         </div>
 
         <div class="product">
@@ -214,7 +214,7 @@
             <h2 class="product__title">Custom Gift Basket</h2>
             <p class="product__description">Leave a comment about design. All pricing subject to change due to size and complexity of design!</p>
             <p class="product__price">$44.99</p>
-            <button class="product__button">Add to Cart</button>
+            <button class="product__button" onclick="addToCart(6, 'Custom Gift Basket', 44.99)">Add to Cart</button>
         </div>
         
     </section>
@@ -222,6 +222,47 @@
     <footer class="footer">
         <p>&copy; 2024 Jules Crafting Corner</p>
     </footer>
+    <!-- JavaScript for adding products to cart -->
+   <script>
+    // JavaScript to handle "Add to Cart" button click event
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', addToCart);
+    });
+
+    function addToCart(event) {
+        const productId = event.target.getAttribute('data-product-id');
+        const productName = event.target.getAttribute('data-product-name');
+        const productPrice = parseFloat(event.target.getAttribute('data-product-price'));
+
+        // Send AJAX request to add product to cart
+        fetch('/add-to-cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productId: productId,
+                productName: productName,
+                productPrice: productPrice
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to add product to cart');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle success response (e.g., display a success message)
+            console.log('Product added to cart:', data);
+        })
+        .catch(error => {
+            // Handle error (e.g., display an error message)
+            console.error('Error adding product to cart:', error);
+        });
+    }
+</script>
+    
      
 </body>
 </html>
