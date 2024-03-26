@@ -70,7 +70,46 @@
         <p>&copy; 2024 Jules Crafting Corner</p>
     </footer>
 
-    <script src="registerUser.js"></script>
+    <script src="config.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.966.0.min.js"></script>
+    <script>
+        document.getElementById('registerButton').addEventListener('click', async function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const userData = {
+                Username: username,
+                Password: password,
+                UserAttributes: [
+                    { Name: 'email', Value: email }
+                ]
+            };
+
+            AWS.config.update({ region: config.cognito.region });
+
+            const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+
+            cognitoidentityserviceprovider.signUp(userData, function(err, data) {
+                if (err) {
+                    console.error('Error:', err);
+                    alert('Registration failed. Please try again later.');
+                } else {
+                    console.log('Success:', data);
+                    alert('Registration successful! Please check your email to verify your account.');
+                    // Optionally, redirect the user to another page after successful registration
+                    // window.location.href = '/success.html';
+
+                    // Clear the form fields
+                    document.getElementById('username').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('password').value = '';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
