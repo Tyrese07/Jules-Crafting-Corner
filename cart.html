@@ -105,32 +105,38 @@
     </footer>
 
     <script>
-        // Example JavaScript code to add items to the shopping cart
+        // Function to add items to the cart
+        function addToCart(product, price) {
+            var cartTable = document.getElementById("cartTable");
+            var tbody = cartTable.getElementsByTagName("tbody")[0];
+            var newRow = tbody.insertRow();
+
+            // Product
+            var cell1 = newRow.insertCell(0);
+            cell1.innerHTML = product;
+
+            // Price
+            var cell2 = newRow.insertCell(1);
+            cell2.innerHTML = "$" + price.toFixed(2);
+
+            // Quantity (default to 1)
+            var cell3 = newRow.insertCell(2);
+            cell3.innerHTML = 1;
+
+            // Total (default to price)
+            var cell4 = newRow.insertCell(3);
+            cell4.innerHTML = "$" + price.toFixed(2);
+        }
+
+        // Function to get products from the product listing page and add them to the cart
         document.addEventListener("DOMContentLoaded", function () {
-            // Function to add items to the cart
-            function addToCart(product, price) {
-                var cartTable = document.getElementById("cartTable");
-                var tbody = cartTable.getElementsByTagName("tbody")[0];
-                var newRow = tbody.insertRow();
-
-                // Product
-                var cell1 = newRow.insertCell(0);
-                cell1.innerHTML = product;
-
-                // Price
-                var cell2 = newRow.insertCell(1);
-                cell2.innerHTML = "$" + price.toFixed(2);
-
-                // Quantity (default to 1)
-                var cell3 = newRow.insertCell(2);
-                cell3.innerHTML = 1;
-
-                // Total (default to price)
-                var cell4 = newRow.insertCell(3);
-                cell4.innerHTML = "$" + price.toFixed(2);
+            var products = localStorage.getItem("cartProducts");
+            if (products) {
+                var parsedProducts = JSON.parse(products);
+                parsedProducts.forEach(function (product) {
+                    addToCart(product.name, product.price);
+                });
             }
-
-           
         });
     </script>
 </body>
