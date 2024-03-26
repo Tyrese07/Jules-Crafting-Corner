@@ -222,46 +222,42 @@
     <footer class="footer">
         <p>&copy; 2024 Jules Crafting Corner</p>
     </footer>
-    <!-- JavaScript for adding products to cart -->
-   <script>
-    // JavaScript to handle "Add to Cart" button click event
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', addToCart);
-    });
+  <script>
+        // Function to fetch products from backend API
+        function fetchProducts() {
+            fetch('https://your-api-gateway-url/products')
+                .then(response => response.json())
+                .then(products => {
+                    const productListing = document.getElementById('productListing');
+                    products.forEach(product => {
+                        const productElement = document.createElement('div');
+                        productElement.innerHTML = `
+                            <h2>${product.name}</h2>
+                            <p>${product.description}</p>
+                            <p>Price: $${product.price}</p>
+                            <button onclick="addToCart('${product.id}', '${product.name}', ${product.price})">Add to Cart</button>
+                        `;
+                        productListing.appendChild(productElement);
+                    });
+                })
+                .catch(error => console.error('Error fetching products:', error));
+        }
 
-    function addToCart(event) {
-        const productId = event.target.getAttribute('data-product-id');
-        const productName = event.target.getAttribute('data-product-name');
-        const productPrice = parseFloat(event.target.getAttribute('data-product-price'));
+        // Function to add products to the cart
+        function addToCart(productId, productName, productPrice) {
+            const cartItem = {
+                id: productId,
+                name: productName,
+                price: productPrice
+            };
 
-        // Send AJAX request to add product to cart
-        fetch('/add-to-cart', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                productId: productId,
-                productName: productName,
-                productPrice: productPrice
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to add product to cart');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Handle success response (e.g., display a success message)
-            console.log('Product added to cart:', data);
-        })
-        .catch(error => {
-            // Handle error (e.g., display an error message)
-            console.error('Error adding product to cart:', error);
-        });
-    }
-</script>
+            // Send cart item to cart.html
+            window.location.href = `cart.html?item=${encodeURIComponent(JSON.stringify(cartItem))}`;
+        }
+
+        // Fetch products on page load
+        fetchProducts();
+    </script>
     
      
 </body>
