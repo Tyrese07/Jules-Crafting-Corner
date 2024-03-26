@@ -87,11 +87,9 @@
                 <tr>
                     <th>Product</th>
                     <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="cartItems">
                 <!-- Cart items will be dynamically added here using JavaScript -->
             </tbody>
         </table>
@@ -107,16 +105,20 @@
     <script>
         // Function to display cart items
         function displayCartItems() {
-            const cartItems = document.getElementById('cartItems');
             const queryParams = new URLSearchParams(window.location.search);
             const itemJson = queryParams.get('item');
-            const cartItem = JSON.parse(decodeURIComponent(itemJson));
+            if (itemJson) {
+                const cartItem = JSON.parse(decodeURIComponent(itemJson));
 
-            const cartItemElement = document.createElement('div');
-            cartItemElement.innerHTML = `
-                <p>${cartItem.name} - $${cartItem.price}</p>
-            `;
-            cartItems.appendChild(cartItemElement);
+                const cartItemRow = document.createElement('tr');
+                cartItemRow.innerHTML = `
+                    <td>${cartItem.name}</td>
+                    <td>$${cartItem.price}</td>
+                `;
+                document.getElementById('cartItems').appendChild(cartItemRow);
+            } else {
+                document.querySelector('section p').textContent = "Your shopping cart is empty. Start adding some creative products!";
+            }
         }
 
         // Display cart items on page load
