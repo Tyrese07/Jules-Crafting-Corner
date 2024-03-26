@@ -103,42 +103,26 @@
     <footer>
         <p>&copy; 2024 Jules Crafting Corner</p>
     </footer>
-
+ <!-- JavaScript code to handle cart items -->
     <script>
-        // Function to add items to the cart
-        function addToCart(product, price) {
-            var cartTable = document.getElementById("cartTable");
-            var tbody = cartTable.getElementsByTagName("tbody")[0];
-            var newRow = tbody.insertRow();
+        // Function to display cart items
+        function displayCartItems() {
+            const cartItems = document.getElementById('cartItems');
+            const queryParams = new URLSearchParams(window.location.search);
+            const itemJson = queryParams.get('item');
+            const cartItem = JSON.parse(decodeURIComponent(itemJson));
 
-            // Product
-            var cell1 = newRow.insertCell(0);
-            cell1.innerHTML = product;
-
-            // Price
-            var cell2 = newRow.insertCell(1);
-            cell2.innerHTML = "$" + price.toFixed(2);
-
-            // Quantity (default to 1)
-            var cell3 = newRow.insertCell(2);
-            cell3.innerHTML = 1;
-
-            // Total (default to price)
-            var cell4 = newRow.insertCell(3);
-            cell4.innerHTML = "$" + price.toFixed(2);
+            const cartItemElement = document.createElement('div');
+            cartItemElement.innerHTML = `
+                <p>${cartItem.name} - $${cartItem.price}</p>
+            `;
+            cartItems.appendChild(cartItemElement);
         }
 
-        // Function to get products from the product listing page and add them to the cart
-        document.addEventListener("DOMContentLoaded", function () {
-            var products = localStorage.getItem("cartProducts");
-            if (products) {
-                var parsedProducts = JSON.parse(products);
-                parsedProducts.forEach(function (product) {
-                    addToCart(product.name, product.price);
-                });
-            }
-        });
+        // Display cart items on page load
+        displayCartItems();
     </script>
+  
 </body>
 
 </html>
