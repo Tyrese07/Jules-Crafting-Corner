@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const config = require('config.js');
+const config = require('./config.js'); // Assuming config.js is in the same directory
 
 // Configure AWS SDK
 AWS.config.update({ region: config.aws.region });
@@ -18,10 +18,11 @@ document.getElementById('registerButton').addEventListener('click', async functi
     };
     
     try {
-        const response = await fetch(config.backendUrl + '/register', {  // Assuming backendUrl is defined in config.js
+        const response = await fetch(config.backendUrl + '/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': config.userPoolId // Pass the User Pool ID as Authorization header
             },
             body: JSON.stringify(userData)
         });
