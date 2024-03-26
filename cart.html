@@ -106,16 +106,18 @@
         // Function to display cart items
         function displayCartItems() {
             const queryParams = new URLSearchParams(window.location.search);
-            const itemJson = queryParams.get('item');
-            if (itemJson) {
-                const cartItem = JSON.parse(decodeURIComponent(itemJson));
-
-                const cartItemRow = document.createElement('tr');
-                cartItemRow.innerHTML = `
-                    <td>${cartItem.name}</td>
-                    <td>$${cartItem.price}</td>
-                `;
-                document.getElementById('cartItems').appendChild(cartItemRow);
+            const itemJson = queryParams.getAll('item');
+            if (itemJson.length > 0) {
+                const cartItems = document.getElementById('cartItems');
+                itemJson.forEach(item => {
+                    const cartItem = JSON.parse(decodeURIComponent(item));
+                    const cartItemRow = document.createElement('tr');
+                    cartItemRow.innerHTML = `
+                        <td>${cartItem.name}</td>
+                        <td>$${cartItem.price}</td>
+                    `;
+                    cartItems.appendChild(cartItemRow);
+                });
             } else {
                 document.querySelector('section p').textContent = "Your shopping cart is empty. Start adding some creative products!";
             }
